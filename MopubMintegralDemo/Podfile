@@ -1,0 +1,16 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '9.0'
+
+target 'MopubMintegralDemo' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for MopubMintegralDemo
+  pod 'mopub-ios-sdk'
+  
+  pod 'MintegralAdSDK/BidBannerAd'
+  pod 'MintegralAdSDK/BidInterstitialVideoAd'
+  pod 'MintegralAdSDK/BidRewardVideoAd'
+  pod 'MintegralAdSDK/BidNativeAd'
+
+end
