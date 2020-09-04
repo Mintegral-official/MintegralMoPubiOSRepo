@@ -22,6 +22,7 @@
 @interface MintegralRewardedVideoCustomEvent () <MTGRewardAdLoadDelegate,MTGRewardAdShowDelegate>
 
 @property (nonatomic, copy) NSString *adUnitId;
+@property (nonatomic, copy) NSString *placementId;
 @property (nonatomic, copy) NSString *adm;
 
 @end
@@ -34,22 +35,23 @@
     NSString *appId = [info objectForKey:@"appId"];
     NSString *appKey = [info objectForKey:@"appKey"];
     NSString *unitId = [info objectForKey:@"unitId"];
-    
+    NSString *placementId = [info objectForKey:@"placementId"];
+
     NSString *errorMsg = nil;
     
     if (!appId) errorMsg = [errorMsg stringByAppendingString: @"Invalid or missing Mintegral appId. Failing ad request. Ensure the app ID is valid on the MoPub dashboard."];
     if (!appKey) errorMsg = [errorMsg stringByAppendingString: @"Invalid or missing Mintegral appKey. Failing ad request. Ensure the app key is valid on the MoPub dashboard."];
     if (!unitId) errorMsg = [errorMsg stringByAppendingString: @"Invalid or missing Mintegral unitId. Failing ad request. Ensure the unit ID is valid on the MoPub dashboard."];
-    
+
     if (errorMsg) {
         NSError *error = [NSError errorWithDomain:kMintegralErrorDomain code:MPRewardedVideoAdErrorInvalidAdUnitID userInfo:@{NSLocalizedDescriptionKey : errorMsg}];
         
         MPLogAdEvent([MPLogEvent adLoadFailedForAdapter:NSStringFromClass(self.class) error:error], nil);
         [self.delegate rewardedVideoDidFailToLoadAdForCustomEvent:self error:error];
-        
         return;
     }
     
+    self.placementId = placementId;
     self.adUnitId = unitId;
     self.adm = adMarkup;
     
@@ -58,11 +60,11 @@
     if (self.adm) {
         MPLogInfo(@"Loading Mintegral rewarded ad markup for Advanced Bidding");
         [MTGBidRewardAdManager sharedInstance].playVideoMute = [MintegralAdapterConfiguration isMute];
-        [[MTGBidRewardAdManager sharedInstance] loadVideoWithBidToken:self.adm unitId:self.adUnitId delegate:self];
+        [[MTGBidRewardAdManager sharedInstance] loadVideoWithBidToken:self.adm placementId:placementId unitId:self.adUnitId delegate:self];
     } else {
         MPLogInfo(@"Loading Mintegral rewarded ad");
         [MTGRewardAdManager sharedInstance].playVideoMute = [MintegralAdapterConfiguration isMute];
-        [[MTGRewardAdManager sharedInstance] loadVideo:self.adUnitId delegate:self];
+        [[MTGRewardAdManager sharedInstance] loadVideoWithPlacementId:placementId unitId:self.adUnitId delegate:self];
     }
     
     MPLogAdEvent([MPLogEvent adLoadAttemptForAdapter:NSStringFromClass(self.class) dspCreativeId:nil dspName:nil], self.adUnitId);
@@ -71,9 +73,10 @@
 - (BOOL)hasAdAvailable
 {
     if (self.adm) {
-        return [[MTGBidRewardAdManager sharedInstance] isVideoReadyToPlay:self.adUnitId];
+        return [[MTGBidRewardAdManager sharedInstance] isVideoReadyToPlayWithPlacementId:self.placementId unitId:self.adUnitId];
     } else {
-        return [[MTGRewardAdManager sharedInstance] isVideoReadyToPlay:self.adUnitId];
+        
+        return [[MTGRewardAdManager sharedInstance] isVideoReadyToPlayWithPlacementId:self.placementId unitId:self.adUnitId];
     }
 }
 
@@ -83,17 +86,17 @@
         
         NSString *customerId = [self.delegate customerIdForRewardedVideoCustomEvent:self];
         
-        if ([[MTGRewardAdManager sharedInstance] respondsToSelector:@selector(showVideo:withRewardId:userId:delegate:viewController:)]) {
-            
+        if ([[MTGRewardAdManager sharedInstance] respondsToSelector:@selector(showVideoWithPlacementId:unitId:withRewardId:userId:delegate:viewController:)]) {
+
             MPLogAdEvent([MPLogEvent adShowAttemptForAdapter:NSStringFromClass(self.class)], self.adUnitId);
             MPLogAdEvent([MPLogEvent adWillAppearForAdapter:NSStringFromClass(self.class)], self.adUnitId);
             
             if (self.adm) {
                 [MTGBidRewardAdManager sharedInstance].playVideoMute = [MintegralAdapterConfiguration isMute];
-                [[MTGBidRewardAdManager sharedInstance] showVideo:self.adUnitId withRewardId:@"1" userId:customerId delegate:self viewController:viewController];
+                [[MTGBidRewardAdManager sharedInstance] showVideoWithPlacementId:self.placementId unitId:self.adUnitId withRewardId:@"1" userId:customerId delegate:self viewController:viewController];
             } else {
                 [MTGRewardAdManager sharedInstance].playVideoMute = [MintegralAdapterConfiguration isMute];
-                [[MTGRewardAdManager sharedInstance] showVideo:self.adUnitId withRewardId:@"1" userId:customerId delegate:self viewController:viewController];
+                [[MTGRewardAdManager sharedInstance] showVideoWithPlacementId:self.placementId unitId:self.adUnitId withRewardId:@"1" userId:customerId delegate:self viewController:viewController];
             }
         }
     } else {
@@ -112,7 +115,9 @@
 - (void)handleAdPlayedForCustomEventNetwork
 {
     if (![self hasAdAvailable]) {
-        MPLogAdEvent([MPLogEvent adShowFailedForAdapter:NSStringFromClass(self.class) error:@"mintegral ad unavailable"], self.adUnitId);
+        NSString *selfClassName = NSStringFromClass(self.class);
+        NSError *error = [NSError errorWithDomain:@"com.mintegral" code:-1 userInfo:@{NSLocalizedDescriptionKey : @"mintegral ad unavailable"}];
+        MPLogAdEvent([MPLogEvent adShowFailedForAdapter:selfClassName error:error], self.adUnitId);
         [self.delegate rewardedVideoDidExpireForCustomEvent:self];
     }
 }

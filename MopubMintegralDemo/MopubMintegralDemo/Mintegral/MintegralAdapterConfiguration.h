@@ -13,30 +13,11 @@ extern NSString *const kMintegralErrorDomain;
 
 @interface MintegralAdapterConfiguration : MPBaseAdapterConfiguration
 
-@property (nonatomic, copy, readonly) NSString * adapterVersion;
-
-@property (nonatomic, copy, readonly, nullable) NSString * biddingToken;
-
-@property (nonatomic, copy, readonly) NSString * moPubNetworkName;
-
-@property (nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> * moPubRequestOptions;
-
-@property (nonatomic, copy, readonly) NSString * networkSdkVersion;
-
-- (void)initializeNetworkWithConfiguration:(NSDictionary<NSString *, id> * _Nullable)configuration
-                                  complete:(void(^ _Nullable)(NSError * _Nullable))complete;
-
-- (void)addMoPubRequestOptions:(NSDictionary<NSString *, NSString *> *)options;
-
-+ (void)setCachedInitializationParameters:(NSDictionary<NSString *, id> * _Nullable)parameters;
-
-+ (NSDictionary<NSString *, id> * _Nullable)cachedInitializationParameters;
-
 +(BOOL)isSDKInitialized;
 
 +(void)sdkInitialized;
 
-+(void)setGDPRInfo:(NSDictionary *)info;
+//+(void)setGDPRInfo:(NSDictionary *)info;
 
 +(BOOL)isMute;
 

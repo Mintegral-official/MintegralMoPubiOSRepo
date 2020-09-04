@@ -28,7 +28,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    NSLog(@"This device's advertisingIdentifier: %@", [MPIdentityProvider identifier]);
+//    NSLog(@"This device's advertisingIdentifier: %@", [MPIdentityProvider identifier]);
 
 
         MPMoPubConfiguration * sdkConfig = [[MPMoPubConfiguration alloc] initWithAdUnitIdForAppInitialization: [MPAdInfo initUnitId]];

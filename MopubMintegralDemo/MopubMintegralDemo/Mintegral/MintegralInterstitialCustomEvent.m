@@ -11,6 +11,7 @@
 
 @interface MintegralInterstitialCustomEvent()<MTGInterstitialVideoDelegate, MTGBidInterstitialVideoDelegate>
 
+@property (nonatomic, copy) NSString *placementId;
 @property (nonatomic, copy) NSString *adUnitId;
 @property (nonatomic,strong) NSTimer *queryTimer;
 @property (nonatomic, copy) NSString *adm;
@@ -27,13 +28,14 @@
     NSString *appId = [info objectForKey:@"appId"];
     NSString *appKey = [info objectForKey:@"appKey"];
     NSString *unitId = [info objectForKey:@"unitId"];
-    
+    NSString *placementId = [info objectForKey:@"placementId"];
+
     NSString *errorMsg = nil;
     
     if (!appId) errorMsg = [errorMsg stringByAppendingString: @"Invalid or missing Mintegral appId. Failing ad request. Ensure the app ID is valid on the MoPub dashboard."];
     if (!appKey) errorMsg = [errorMsg stringByAppendingString: @"Invalid or missing Mintegral appKey. Failing ad request. Ensure the app key is valid on the MoPub dashboard."];
     if (!unitId) errorMsg = [errorMsg stringByAppendingString: @"Invalid or missing Mintegral unitId. Failing ad request. Ensure the unit ID is valid on the MoPub dashboard."];
-    
+
     if (errorMsg) {
         NSError *error = [NSError errorWithDomain:kMintegralErrorDomain code:-1500 userInfo:@{NSLocalizedDescriptionKey : errorMsg}];
         
@@ -43,6 +45,7 @@
         return;
     }
     
+    self.placementId = placementId;
     self.adUnitId = unitId;
     self.adm = adMarkup;
     
@@ -52,7 +55,7 @@
         MPLogInfo(@"Loading Mintegral interstitial ad markup for Advanced Bidding");
         
         if (!_ivBidAdManager ) {
-            _ivBidAdManager  = [[MTGBidInterstitialVideoAdManager alloc] initWithUnitID:self.adUnitId delegate:self];
+            _ivBidAdManager  = [[MTGBidInterstitialVideoAdManager alloc] initWithPlacementId:placementId unitId:self.adUnitId delegate:self];
             _ivBidAdManager.delegate = self;
         }
         _ivBidAdManager.playVideoMute = [MintegralAdapterConfiguration isMute];
@@ -61,7 +64,7 @@
         MPLogInfo(@"Loading Mintegral interstitial ad");
         
         if (!_mtgInterstitialVideoAdManager) {
-            _mtgInterstitialVideoAdManager = [[MTGInterstitialVideoAdManager alloc] initWithUnitID:self.adUnitId delegate:self];
+            _mtgInterstitialVideoAdManager = [[MTGInterstitialVideoAdManager alloc] initWithPlacementId:placementId unitId:self.adUnitId delegate:self];
         }
         _mtgInterstitialVideoAdManager.playVideoMute = [MintegralAdapterConfiguration isMute];
         [_mtgInterstitialVideoAdManager loadAd];

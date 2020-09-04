@@ -306,22 +306,22 @@
 		E430A54E240E77CA0016EFC0 /* Mintegral */ = {
 			isa = PBXGroup;
 			children = (
-				E430A54F240E77CA0016EFC0 /* MintegralNativeAdAdapter.m */,
-				E430A550240E77CA0016EFC0 /* MintegralNativeCustomEvent.m */,
-				E430A551240E77CA0016EFC0 /* MintegralBannerCustomEvent.h */,
-				E430A552240E77CA0016EFC0 /* MintegralRewardedVideoCustomEvent.m */,
-				E430A553240E77CA0016EFC0 /* MintegralInterstitialCustomEvent.h */,
 				E430A554240E77CA0016EFC0 /* CHANGELOG.md */,
-				E430A555240E77CA0016EFC0 /* MintegralNativeAdRenderer.m */,
-				E430A556240E77CA0016EFC0 /* MintegralAdapterConfiguration.m */,
-				E430A557240E77CA0016EFC0 /* README.md */,
-				E430A558240E77CA0016EFC0 /* MintegralNativeCustomEvent.h */,
-				E430A559240E77CA0016EFC0 /* MintegralNativeAdAdapter.h */,
-				E430A55A240E77CA0016EFC0 /* MintegralInterstitialCustomEvent.m */,
-				E430A55B240E77CA0016EFC0 /* MintegralRewardedVideoCustomEvent.h */,
-				E430A55C240E77CA0016EFC0 /* MintegralBannerCustomEvent.m */,
-				E430A55D240E77CA0016EFC0 /* MintegralNativeAdRenderer.h */,
 				E430A55E240E77CA0016EFC0 /* MintegralAdapterConfiguration.h */,
+				E430A556240E77CA0016EFC0 /* MintegralAdapterConfiguration.m */,
+				E430A551240E77CA0016EFC0 /* MintegralBannerCustomEvent.h */,
+				E430A55C240E77CA0016EFC0 /* MintegralBannerCustomEvent.m */,
+				E430A553240E77CA0016EFC0 /* MintegralInterstitialCustomEvent.h */,
+				E430A55A240E77CA0016EFC0 /* MintegralInterstitialCustomEvent.m */,
+				E430A559240E77CA0016EFC0 /* MintegralNativeAdAdapter.h */,
+				E430A54F240E77CA0016EFC0 /* MintegralNativeAdAdapter.m */,
+				E430A55D240E77CA0016EFC0 /* MintegralNativeAdRenderer.h */,
+				E430A555240E77CA0016EFC0 /* MintegralNativeAdRenderer.m */,
+				E430A558240E77CA0016EFC0 /* MintegralNativeCustomEvent.h */,
+				E430A550240E77CA0016EFC0 /* MintegralNativeCustomEvent.m */,
+				E430A55B240E77CA0016EFC0 /* MintegralRewardedVideoCustomEvent.h */,
+				E430A552240E77CA0016EFC0 /* MintegralRewardedVideoCustomEvent.m */,
+				E430A557240E77CA0016EFC0 /* README.md */,
 			);
 			name = Mintegral;
 			path = MopubMintegralDemo/Mintegral;
